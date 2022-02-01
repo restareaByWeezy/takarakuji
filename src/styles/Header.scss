@@ -1,5 +1,14 @@
 .header {
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  text-align: center;
+
+  .table {
+    margin-top: 1em;
+    border: 1px solid #b5b5b5;
+    border-collapse: separate;
+    border-spacing: 10px;
+
+    .table-header {
+      background-color: antiquewhite;
+    }
+  }
 }

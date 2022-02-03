@@ -1,5 +1,5 @@
 import { isFocusable } from "@testing-library/user-event/dist/utils";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import NumList from "./NumList";
 
 const Numbers = props => {
@@ -8,14 +8,45 @@ const Numbers = props => {
   const [submitLottoList, setSubmitLottoList] = useState([]);
   const { front, back } = props.winningObject;
 
+  //slice를 이용하여 인풋 숫자 제한
+  // const onFrontNumberChange = e => {
+  //   const sliceFront = e.target.value.slice(0, 3);
+  //   setFrontNumber(sliceFront);
+  // };
+  const digitRegex = /[0-9]/g;
+
   const onFrontNumberChange = e => {
-    const sliceFront = e.target.value.slice(0, 3);
-    setFrontNumber(sliceFront);
+    if (frontNumber.length <= 1) {
+      if (digitRegex.test(`${e.target.value}`)) {
+        setFrontNumber(e.target.value);
+      } else if (e.target.value.length === 0) {
+        setFrontNumber("");
+      }
+    } else if (
+      e.target.value.length < 4 &&
+      digitRegex.test(`${e.target.value[e.target.value.length - 1]}`)
+    ) {
+      setFrontNumber(e.target.value);
+      console.log("hi");
+    }
   };
+  //정규표현식을 이용하여 인풋 숫자 제한
   const onBackNumberChange = e => {
-    setBackNumber(e.target.value);
+    if (backNumber.length <= 1) {
+      if (digitRegex.test(`${e.target.value[e.target.value.length - 1]}`)) {
+        setBackNumber(e.target.value);
+      } else if (e.target.value.length === 0) {
+        setBackNumber("");
+      }
+    } else if (
+      e.target.value.length < 7 &&
+      digitRegex.test(`${e.target.value[e.target.value.length - 1]}`)
+    ) {
+      setBackNumber(e.target.value);
+      console.log("hi");
+    }
   };
-  //이게 뒤에있으면 왜 안되지?
+
   const onKeyPress = e => {
     if (e.key == "Enter") {
       onClickButton();
@@ -36,6 +67,7 @@ const Numbers = props => {
       ) {
         return <span>1等</span>;
       }
+
       //1等の前後賞
       if (
         front.some(number => {
@@ -99,33 +131,52 @@ const Numbers = props => {
         return "5等";
       }
 
-      return "";
+      return "꽝";
     };
+    //length가 3
+    if (frontNumber.length !== 3 || backNumber.length !== 6) {
+      if (frontNumber.length !== 3 && backNumber.length !== 6) {
+        alert("조 번호는 3자리이어야 합니다.\n뒷자리는 6자리이어야 합니다.");
+      } else if (frontNumber.length !== 3) {
+        alert("조 번호는 3자리이어야 합니다.");
+      } else if (backNumber.length !== 6) {
+        alert("뒷자리는 6자리이어야 합니다.");
+      }
+    } else {
+      const lottoInfo = {
+        front: frontNumber,
+        back: backNumber,
+        rank: getRank(),
+      };
+      const tempList = [...submitLottoList];
 
-    const lottoInfo = { front: frontNumber, back: backNumber, rank: getRank() };
-    const tempList = [...submitLottoList];
+      tempList.push(lottoInfo);
+      setSubmitLottoList(tempList);
 
-    tempList.push(lottoInfo);
-    setSubmitLottoList(tempList);
-
-    setFrontNumber("");
-    setBackNumber("");
+      setFrontNumber("");
+      setBackNumber("");
+    }
   };
+
+  useEffect(() => {
+    //주소값 비교하면 안되니까 submitLottolist !==[]가 아님
+    if (submitLottoList.length !== 0) {
+      window.scrollTo(0, document.body.scrollHeight, "smooth");
+    }
+  }, [submitLottoList]);
 
   return (
     <div>
       <div>
+        <input type='text' onChange={onFrontNumberChange} value={frontNumber} />
         <input
-          type='number'
-          onChange={onFrontNumberChange}
-          value={frontNumber}
-        />
-        <input
-          type='number'
+          type='text'
           onChange={onBackNumberChange}
           onKeyPress={onKeyPress}
+          // max={999999}
+          // pattern='\d*'
+          // maxLength={6}
           value={backNumber}
-          maxLength={6}
         />
         <button onClick={onClickButton}>登録</button>
       </div>

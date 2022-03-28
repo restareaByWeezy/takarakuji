@@ -1,8 +1,7 @@
-# 宝くじ当せん自動探し
-# 로또번호 맞춰보기!
+# 宝くじ当せん自動探し (로또번호 맞춰보기!)
 
-## 番号参考：
-## 번호참조:
+## 番号参考：(번호참조:)
+
 https://www.mizuhobank.co.jp/retail/takarakuji/check/tsujyo/result.html?type=kct&order=2588
 
 

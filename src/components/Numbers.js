@@ -8,11 +8,6 @@ const Numbers = props => {
   const [submitLottoList, setSubmitLottoList] = useState([]);
   const { front, back } = props.winningObject;
 
-  //slice를 이용하여 인풋 숫자 제한
-  // const onFrontNumberChange = e => {
-  //   const sliceFront = e.target.value.slice(0, 3);
-  //   setFrontNumber(sliceFront);
-  // };
   const digitRegex = /[0-9]/g;
 
   const onFrontNumberChange = e => {
@@ -30,7 +25,7 @@ const Numbers = props => {
       console.log("hi");
     }
   };
-  //정규표현식을 이용하여 인풋 숫자 제한
+
   const onBackNumberChange = e => {
     if (backNumber.length <= 1) {
       if (digitRegex.test(`${e.target.value[e.target.value.length - 1]}`)) {
@@ -43,7 +38,6 @@ const Numbers = props => {
       digitRegex.test(`${e.target.value[e.target.value.length - 1]}`)
     ) {
       setBackNumber(e.target.value);
-      console.log("hi");
     }
   };
 
@@ -55,8 +49,7 @@ const Numbers = props => {
 
   const onClickButton = () => {
     const getRank = () => {
-      console.log("hi");
-      //1등
+      //１等
       if (
         front.some(number => {
           return frontNumber === number;
@@ -85,9 +78,9 @@ const Numbers = props => {
           return backNumber === number;
         })
       ) {
-        return "特別償";
+        return "1等の組違い賞";
       }
-      //2등
+      //２等
       if (
         front.some(number => {
           return frontNumber === number;
@@ -98,7 +91,7 @@ const Numbers = props => {
       ) {
         return "2等";
       }
-      //특별상
+      //特別償
       if (
         back.extra.some(number => {
           return backNumber.slice(-4) === number;
@@ -106,7 +99,7 @@ const Numbers = props => {
       ) {
         return "特別償";
       }
-      //3등
+      //3等
       if (
         back.third.some(number => {
           return backNumber.slice(-3) === number;
@@ -114,7 +107,7 @@ const Numbers = props => {
       ) {
         return "3等";
       }
-      //4등
+      //4等
       if (
         back.forth.some(number => {
           return backNumber.slice(-2) === number;
@@ -122,7 +115,7 @@ const Numbers = props => {
       ) {
         return "4等";
       }
-      //5등
+      //5等
       if (
         back.fifth.some(number => {
           return backNumber.slice(-1) === number;
@@ -131,16 +124,16 @@ const Numbers = props => {
         return "5等";
       }
 
-      return "꽝";
+      return "外れ";
     };
     //length가 3
     if (frontNumber.length !== 3 || backNumber.length !== 6) {
       if (frontNumber.length !== 3 && backNumber.length !== 6) {
-        alert("조 번호는 3자리이어야 합니다.\n뒷자리는 6자리이어야 합니다.");
+        alert("組番号は３形態になります。\n裏数字は６形態になります。");
       } else if (frontNumber.length !== 3) {
-        alert("조 번호는 3자리이어야 합니다.");
+        alert("組番号は３形態になります。");
       } else if (backNumber.length !== 6) {
-        alert("뒷자리는 6자리이어야 합니다.");
+        alert("裏数字は６形態になります。");
       }
     } else {
       const lottoInfo = {
@@ -173,9 +166,6 @@ const Numbers = props => {
           type='text'
           onChange={onBackNumberChange}
           onKeyPress={onKeyPress}
-          // max={999999}
-          // pattern='\d*'
-          // maxLength={6}
           value={backNumber}
         />
         <button onClick={onClickButton}>登録</button>
